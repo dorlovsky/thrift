@@ -2584,6 +2584,8 @@ void t_java_generator::generate_service_async_client(t_service* tservice) {
     indent(f_service_) << "public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {" << endl;
     indent_up();
 
+	std::string messageType = !(*f_iter)->is_oneway() ? "Thrift.MessageType.CALL" : "Thrift.MessageType.ONEWAY";
+
     // Serialize request
     // NOTE we are leaving seqid as 0, for now (see above)
     f_service_ << 

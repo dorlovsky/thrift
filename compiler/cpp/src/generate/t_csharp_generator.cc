@@ -1717,9 +1717,14 @@ void t_csharp_generator::generate_service_client(t_service* tservice) {
     }
     scope_up(f_service_);
 
-    f_service_ <<
-      indent() << "oprot_.WriteMessageBegin(new TMessage(\"" << funname << "\", TMessageType.Call, seqid_));" << endl <<
-      indent() << argsname << " args = new " << argsname << "();" << endl;
+	f_service_ <<
+		indent() << "oprot_.WriteMessageBegin(new TMessage(\"" << funname;
+	if ((*f_iter)->is_oneway())
+		f_service_ << "\", TMessageType.Oneway, seqid_));" << endl;
+	else
+		f_service_ << "\", TMessageType.Call, seqid_));" << endl;
+
+	f_service_ << indent() << argsname << " args = new " << argsname << "();" << endl;
 
     for (fld_iter = fields.begin(); fld_iter != fields.end(); ++fld_iter) {
       f_service_ <<

@@ -1676,8 +1676,9 @@ void t_php_generator::generate_service_client(t_service* tservice) {
           indent() << "$buff .= '" << funname << "';" << endl <<
           indent() << "$buff .= pack('N', $this->seqid_);" << endl;
       } else {
+		  string messageType = !(*f_iter)->is_oneway() ? "TMessageType::CALL" : "TMessageType::ONEWAY";
         f_service_ <<
-          indent() << "$this->output_->writeMessageBegin('" << (*f_iter)->get_name() << "', " << "TMessageType::CALL, $this->seqid_);" << endl;
+			indent() << "$this->output_->writeMessageBegin('" << (*f_iter)->get_name() << "', " << messageType << ", $this->seqid_);" << endl;
       }
 
       // Write to the stream

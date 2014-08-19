@@ -1675,9 +1675,10 @@ void t_as3_generator::generate_service_client(t_service* tservice) {
     vector<t_field*>::const_iterator fld_iter;
     const vector<t_field*>& fields = arg_struct->get_members();
 
-    // Serialize the request
-    f_service_ <<
-      indent() << "oprot_.writeMessageBegin(new TMessage(\"" << funname << "\", TMessageType.CALL, seqid_));" << endl <<
+	string messageType = !(*f_iter)->is_oneway() ? "TMessageType.CALL" : "TMessageType.ONEWAY";
+	// Serialize the request
+	f_service_ <<
+		indent() << "oprot_.writeMessageBegin(new TMessage(\"" << funname << "\", " << messageType << ", seqid_));" << endl <<
       indent() << "var args:" << argsname << " = new " << argsname << "();" << endl;
 
     for (fld_iter = fields.begin(); fld_iter != fields.end(); ++fld_iter) {

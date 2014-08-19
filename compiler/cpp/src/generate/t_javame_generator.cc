@@ -2107,9 +2107,10 @@ void t_javame_generator::generate_service_client(t_service* tservice) {
       "public " << function_signature(&send_function) << endl;
     scope_up(f_service_);
 
+	string messageType = !(*f_iter)->is_oneway() ? "TMessageType.CALL" : "TMessageType.ONEWAY";
     // Serialize the request
     f_service_ <<
-      indent() << "oprot_.writeMessageBegin(new TMessage(\"" << funname << "\", TMessageType.CALL, ++seqid_));" << endl <<
+	  indent() << "oprot_.writeMessageBegin(new TMessage(\"" << funname << "\", " << messageType << ", ++seqid_)); " << endl <<
       indent() << argsname << " args = new " << argsname << "();" << endl;
 
     for (fld_iter = fields.begin(); fld_iter != fields.end(); ++fld_iter) {

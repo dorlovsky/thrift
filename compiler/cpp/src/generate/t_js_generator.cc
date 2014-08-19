@@ -1349,13 +1349,14 @@ void t_js_generator::generate_service_client(t_service* tservice) {
     }
 
     std::string argsname =  js_namespace(program_)+ service_name_ + "_" + (*f_iter)->get_name() + "_args";
+	std::string messageType = !(*f_iter)->is_oneway() ? "Thrift.MessageType.CALL" : "Thrift.MessageType.ONEWAY";
 
     // Serialize the request header
     if (gen_node_) {
-       f_service_ << indent() << outputVar << ".writeMessageBegin('" << (*f_iter)->get_name() << "', Thrift.MessageType.CALL, this.seqid());" << endl;
+       f_service_ << indent() << outputVar << ".writeMessageBegin('" << (*f_iter)->get_name() << "', " << messageType << ", this.seqid());" << endl;
     }
     else {
-       f_service_ << indent() << outputVar << ".writeMessageBegin('" << (*f_iter)->get_name() << "', Thrift.MessageType.CALL, this.seqid);" << endl;
+		f_service_ << indent() << outputVar << ".writeMessageBegin('" << (*f_iter)->get_name() << "', " << messageType << ", this.seqid);" << endl;
     }
 
     f_service_ <<
